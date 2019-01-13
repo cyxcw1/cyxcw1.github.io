@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="离开学校，也就离开教育网，6v也关了，离开了竟也不觉得很可惜。回家后用使用移动的宽带上网，google果然被墙了，还有stackoverflow内某些链接也被墙，比如说某些图片刷不出来。虽然google有host（我不会告诉你有这个找谷歌host的好网站的），但是其他被墙的链接一一找host也是忒麻烦。于是使用goagent+chrome（插件SwitchySharp）的组合。 mac系统版本：O">
+<meta name="keywords" content="Chrome,goagent,mac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mac下配置goagent 3.0">
+<meta property="og:url" content="http://cyxcw1.github.io/2015/01/19/mac-config-goagent/index.html">
+<meta property="og:site_name" content="义薄云天">
+<meta property="og:description" content="离开学校，也就离开教育网，6v也关了，离开了竟也不觉得很可惜。回家后用使用移动的宽带上网，google果然被墙了，还有stackoverflow内某些链接也被墙，比如说某些图片刷不出来。虽然google有host（我不会告诉你有这个找谷歌host的好网站的），但是其他被墙的链接一一找host也是忒麻烦。于是使用goagent+chrome（插件SwitchySharp）的组合。 mac系统版本：O">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2015/01/C343FCE6-592E-4D26-8A51-49E6263BD0291.jpg">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2015/01/0E1B0BC0-3D8E-454C-9745-8F0D0F1E13C81.jpg">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2015/01/EFC7E60B-914A-4873-8CD0-96AD87C92B271.jpg">
+<meta property="og:updated_time" content="2019-01-13T06:24:19.240Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mac下配置goagent 3.0">
+<meta name="twitter:description" content="离开学校，也就离开教育网，6v也关了，离开了竟也不觉得很可惜。回家后用使用移动的宽带上网，google果然被墙了，还有stackoverflow内某些链接也被墙，比如说某些图片刷不出来。虽然google有host（我不会告诉你有这个找谷歌host的好网站的），但是其他被墙的链接一一找host也是忒麻烦。于是使用goagent+chrome（插件SwitchySharp）的组合。 mac系统版本：O">
+<meta name="twitter:image" content="http://yunuschan.com/wp-content/uploads/2015/01/C343FCE6-592E-4D26-8A51-49E6263BD0291.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://cyxcw1.github.io/2015/01/19/mac-config-goagent/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>mac下配置goagent 3.0 | 义薄云天</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">义薄云天</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cyxcw1.github.io/2015/01/19/mac-config-goagent/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="义薄云天">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mac下配置goagent 3.0
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-01-19 22:53:50" itemprop="dateCreated datePublished" datetime="2015-01-19T22:53:50+08:00">2015-01-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-13 14:24:19" itemprop="dateModified" datetime="2019-01-13T14:24:19+08:00">2019-01-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>离开学校，也就离开教育网，6v也关了，离开了竟也不觉得很可惜。回家后用使用移动的宽带上网，google果然被墙了，还有stackoverflow内某些链接也被墙，比如说某些图片刷不出来。虽然google有host（我不会告诉你有这个找<a href="http://serve.netsh.org/pub/gethosts.php" target="_blank" rel="noopener">谷歌host</a>的好网站的），但是其他被墙的链接一一找host也是忒麻烦。于是使用goagent+chrome（插件SwitchySharp）的组合。</p>
+<p>mac系统版本：OS X Yosemite 10.10.1</p>
+<p>goagent版本：goagent 3.0</p>
+<p>配置的步骤和网上文章描述的大体相似，这里只简要提一下，并重点描述配置这个版本配置过程中遇到的问题。</p>
+<p><strong>一、goagent配置</strong></p>
+<p>1. 要使用goagent，你需要一个谷歌账号，点击下面的链接注册：</p>
+<p><a href="https://accounts.google.com/SignUp" target="_blank" rel="noopener">https://accounts.google.com/SignUp</a></p>
+<p>2. 注册<a href="https://appengine.google.com/" target="_blank" rel="noopener">GAE</a>（Google App Engine）并获得一个APPID，步骤我就不详细说了。</p>
+<p>3. 下载goagent程序，现在的goagent挂载在<a href="https://github.com/goagent/goagent" target="_blank" rel="noopener">github上</a>了。</p>
+<p>4. 步骤3下载下来后应该得到一个压缩包，解压后，进入local文件夹，改写你的proxy.ini文件的以下部分中的”appid”以及”password”：</p>
+<p><pre class="theme:monokai lang:c++ decode:true">[gae]<br>enable = 1<br>appid = [你的APPID]<br>password = [你的密码]<br>path = /_gh/<br>mode = https<br>ipv6 = 0<br>sslversion = TLSv1<br>window = 7<br>cachesock = 1<br>headfirst = 1<br>keepalive = 0<br>obfuscate = 0<br>validate = 0<br>transport = 0<br>options =<br>regions =</pre><br>5. 由于“步骤6”上传你的个人信息的时候需要开启代理，所以本步骤中在你的local文件夹下用命令行执行下述代码先开启goagent：</p>
+<p><pre class="theme:monokai lang:sh decode:true">python proxy.py</pre><br>6. 进入到goagent的server文件夹上传你的个人信息。这里特别说明下，很多网站上说使用</p>
+<p><pre class="theme:monokai lang:sh decode:true ">python uploader.zip</pre><br>来上传个人信息，但是我并没有找到[uploader.zip]这个文件。我使用下述代码上传：</p>
+<p><pre class="theme:monokai lang:sh decode:true">python uploader.py</pre><br>上传过程中需要输入你的APPID、google账号以及密码，这里特别注意下你的google账号是不是开启了两步验证。如果开启了两步验证，而你还是输入你的google账号的密码，会出现：</p>
+<p><pre class="theme:monokai lang:sh decode:true">AttributeError: can’t set attribute</pre><br>的情况。这时，有两种解决办法：</p>
+<p>(1) 关闭谷歌账号的两步验证。可到<a href="https://accounts.google.com/b/0/SmsAuthSettings#devices" target="_blank" rel="noopener">这个页面</a>关闭两步验证；</p>
+<p>(2) 使用专用应用密码上传信息。通过下列方式可以查看专用密码：进入<a href="https://myaccount.google.com/" target="_blank" rel="noopener">你的谷歌账户</a>，在[登陆]模块找到[两步验证]，点击进去后找到[专用应用密码]–[管理专用应用密码]，按照提示生成你应用的专用密码。在“步骤6”上传信息输入密码时，就输入你的专用应用密码，你的个人信息即可上传成功。</p>
+<p>7. 由于“步骤5”开启了goagent，这时你需要把“步骤5”开启的goagent关闭，再进入到local文件夹，双击goagent-osx.command，就可以开启你的goagent代理。如果你想开机自动启动goagent，可以把goagent-osx.command拽托到docker固定，右键docker上的该图标点击：选项–登陆时打开，就可以实现goagent的开机启动。</p>
+<p>二、chrome的配置</p>
+<p>chrome的SwitchySharp插件配合goagent能让你的翻墙非常灵活，什么墙你想翻就翻，不想翻（如果你有Host）就撞，好吧这其实是过滤功能。</p>
+<p>1. 首先，给你的chrome下载<a href="https://chrome.google.com/webstore/detail/proxy-switchysharp/dpplabbmogkhghncfbfdeeokoefdjegm?hl=zh-CN" target="_blank" rel="noopener">SwitchySharp插件</a>（现在已经有了新版本SwitchySharp Omega，但是我没有使用，配置应该差不多）。</p>
+<p>2. 导入goagent的配置。进入该插件的[选项]，进入[导入导出]选项卡，点击[从文件中恢复]，在弹出的框中选择你的[goagent文件夹]/local/SwitchyOptions.bak文件。</p>
+<p>3. 配置你的goagent的过滤规则。进入[切换规则]选项卡，编辑你的过滤规则，以我的为例：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2015/01/C343FCE6-592E-4D26-8A51-49E6263BD0291.jpg" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2015/01/C343FCE6-592E-4D26-8A51-49E6263BD0291.jpg" alt="C343FCE6-592E-4D26-8A51-49E6263BD029"></a></p>
+<p>&nbsp;</p>
+<p>URL模式支持正则表达式，增添起来很方便。 编辑完后记得[保存]。</p>
+<p>4. 这时点击你chrome上的SwitchySharp图标，选择[自动切换模式]，chrome则会根据你的过滤规则调用goagent翻墙。当然，若你想全程使用goagent翻墙，可以选择[GoAgent]情景模式翻墙。若不想翻墙了就选择[直接连接]。</p>
+<p>5. 大功告成了？反正我没有，我发现我不能成功登陆https服务器，chrome总提示“不是私密链接”。上网查明才发现是“证书”的问题。需要往chrome导入goagent的证书。步骤如下：</p>
+<p>点击[设置]–[显示高级设置]–找到HTTPS/SSL下的[管理证书]并点击，会弹出一个框：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2015/01/0E1B0BC0-3D8E-454C-9745-8F0D0F1E13C81.jpg" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2015/01/0E1B0BC0-3D8E-454C-9745-8F0D0F1E13C81.jpg" alt="0E1B0BC0-3D8E-454C-9745-8F0D0F1E13C8"></a></p>
+<p>&nbsp;</p>
+<p>“种类”框下选中“证书”，按[shift+command+i]组合键，在弹出的框选择[你个goagent文件夹]/local/CA.crt 并确定，就可以导入你的goagent证书。双击你的goagent证书，按照下图设置所有项目为[始终信任]：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2015/01/EFC7E60B-914A-4873-8CD0-96AD87C92B271.jpg" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2015/01/EFC7E60B-914A-4873-8CD0-96AD87C92B271.jpg" alt="EFC7E60B-914A-4873-8CD0-96AD87C92B27"></a></p>
+<p>&nbsp;</p>
+<p>最后重启你的chrome。尝试上https服务器的网站，如香港谷歌，已经可以正常链接了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Chrome/" rel="tag"># Chrome</a>
+          
+            <a href="/tags/goagent/" rel="tag"># goagent</a>
+          
+            <a href="/tags/mac/" rel="tag"># mac</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/06/07/member-function-access-object-private-member/" rel="next" title="C++成​员​函​数​中​访​问​对​象​的​私​有​成​员">
+                <i class="fa fa-chevron-left"></i> C++成​员​函​数​中​访​问​对​象​的​私​有​成​员
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/01/make-mobile-broadband-network-normal-query-12306-tickets/" rel="prev" title="使移动宽带下的网络正常查询12306的余票">
+                使移动宽带下的网络正常查询12306的余票 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chan</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

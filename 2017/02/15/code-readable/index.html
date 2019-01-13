@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="可读性高的代码，好处就不多说了，看上去美观，便于维护（瞬间定位Bug+秒解Bug）、便于扩展，便于团队协作，当遇到变态的需求，代码需要重构时，也为代码重构提供良好的条件。下面从几个基本的方面，谈谈几个有助于提高代码的可读性的点。 1. 代码规范这是最基本的也是最容易学的，依葫芦画瓢即可。首先参考这边文章中的「安卓编码规范」。只是参考，不做过度的强求，某些代码风格方面（如大括号不换行还是换行）不是非">
+<meta name="keywords" content="重构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论代码可读性">
+<meta property="og:url" content="http://cyxcw1.github.io/2017/02/15/code-readable/index.html">
+<meta property="og:site_name" content="义薄云天">
+<meta property="og:description" content="可读性高的代码，好处就不多说了，看上去美观，便于维护（瞬间定位Bug+秒解Bug）、便于扩展，便于团队协作，当遇到变态的需求，代码需要重构时，也为代码重构提供良好的条件。下面从几个基本的方面，谈谈几个有助于提高代码的可读性的点。 1. 代码规范这是最基本的也是最容易学的，依葫芦画瓢即可。首先参考这边文章中的「安卓编码规范」。只是参考，不做过度的强求，某些代码风格方面（如大括号不换行还是换行）不是非">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-13T06:24:19.227Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论代码可读性">
+<meta name="twitter:description" content="可读性高的代码，好处就不多说了，看上去美观，便于维护（瞬间定位Bug+秒解Bug）、便于扩展，便于团队协作，当遇到变态的需求，代码需要重构时，也为代码重构提供良好的条件。下面从几个基本的方面，谈谈几个有助于提高代码的可读性的点。 1. 代码规范这是最基本的也是最容易学的，依葫芦画瓢即可。首先参考这边文章中的「安卓编码规范」。只是参考，不做过度的强求，某些代码风格方面（如大括号不换行还是换行）不是非">
+
+
+
+
+
+
+  <link rel="canonical" href="http://cyxcw1.github.io/2017/02/15/code-readable/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>论代码可读性 | 义薄云天</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">义薄云天</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cyxcw1.github.io/2017/02/15/code-readable/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="义薄云天">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论代码可读性
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-15 23:11:58" itemprop="dateCreated datePublished" datetime="2017-02-15T23:11:58+08:00">2017-02-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-13 14:24:19" itemprop="dateModified" datetime="2019-01-13T14:24:19+08:00">2019-01-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>可读性高的代码，好处就不多说了，看上去美观，便于维护（瞬间定位Bug+秒解Bug）、便于扩展，便于团队协作，当遇到变态的需求，代码需要重构时，也为代码重构提供良好的条件。下面从几个基本的方面，谈谈几个有助于提高代码的可读性的点。</p>
+<h3 id="1-代码规范"><a href="#1-代码规范" class="headerlink" title="1. 代码规范"></a>1. 代码规范</h3><p>这是最基本的也是最容易学的，依葫芦画瓢即可。首先参考这边文章中的<a href="magnet:?xt=urn:btih:9e93f2aa5e0dadae9b03da8befafa08c0c722069" target="_blank" rel="noopener">「安卓编码规范」</a>。只是参考，不做过度的强求，某些代码风格方面（如大括号不换行还是换行）不是非要统一，这样做没有多大意义。个人认为几个比较重要的点：</p>
+<h4 id="（1）Let-Code-Talk"><a href="#（1）Let-Code-Talk" class="headerlink" title="（1）Let Code Talk"></a>（1）Let Code Talk</h4><p>类、变量、方法的名称，尽量起一个有意义的名称，养成良好的习惯。当然，一些临时变量，使用<code>tmp</code>，或者一些简单的函数返回结果使用<code>res</code>，也没多大关系，但是遇到<code>active1</code>~<code>active32</code>这样的命名方式，简直会让人抓狂。起个好名字，至少他人维护你的老代码时，能够瞬间理解这个变量的意义，而不需要特意麻烦你再给他解释一遍。</p>
+<p>另外，建议Let Code Talk也别做得太过了，造成一个变量就好像一句话一样冗长。我们是写代码，而不是真的「Talk」或者在写文章，见下节。</p>
+<h4 id="（2）命名长度问题"><a href="#（2）命名长度问题" class="headerlink" title="（2）命名长度问题"></a>（2）命名长度问题</h4><p>一般的规范建议<strong>25个</strong>字符，工程比较大的话，多几个字符，<strong>30个</strong>字符也ok。实在放不下了，可以用缩写，如<code>KnifeBreakerActionManager</code>–&gt;<code>KnifrBrkrMgr</code>。还是放不下，可以使用<strong>注释</strong>。</p>
+<h4 id="（3）注释"><a href="#（3）注释" class="headerlink" title="（3）注释"></a>（3）注释</h4><p>上文提到了注释可以解决命名长度问题，遇到一些复杂的业务逻辑，不要懒，一定也要留下注释，以免日后自己维护的时候需要拼命回忆，如果是他人维护，那就算那人倒霉。</p>
+<p>当然，也不要过度注释：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(breakfastReady) &#123;</span><br><span class="line"><span class="comment">// 如果早餐准备好了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果觉得好玩儿，当我没说，:)</p>
+<p><strong>注释</strong>是一个良好的编码习惯，写代码的过程中，想想如果一年后自己来维护这段代码，或者交给别人维护，是否能在短时间内get到这段代码在表达什么。</p>
+<h4 id="（4）80列"><a href="#（4）80列" class="headerlink" title="（4）80列"></a>（4）80列</h4><p>一行代码不要过长，不然需要拖动横向滚动条，才能看全这一行代码。你的显示器够大，别人的显示器却可能是小笔记本，养成良好的习惯，找一个合适的位置，啪地敲一下回车来断行。旧时习惯在80列的位置，项目稍微大一点80列可能不太够用，多加几个字符也无伤大雅。</p>
+<p>如果细心观察，Android Studio编辑区域的右边有一条灰色竖线，大概在100列的位置，这是为了提醒你控制你这一行的代码长度。另外，<code>strings.xml</code>等各种资源文件里的内容，个人认为不需要拘泥于<strong>80列</strong>，特别是<code>strings</code>，换行可能会影响格式。</p>
+<h4 id="（5）缩进"><a href="#（5）缩进" class="headerlink" title="（5）缩进"></a>（5）缩进</h4><p>提到了「80列」，不得不提到缩进。过多层级的缩进，不仅仅影响代码的可读性（如轻易达到「80列」），还给调试的时候带来困难。先看看糟糕的缩进：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(haveApple) &#123;</span><br><span class="line">	<span class="keyword">if</span>(havePancil) &#123;</span><br><span class="line">		<span class="keyword">if</span>(combineApplePan) &#123;</span><br><span class="line">			<span class="comment">// todo</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这只是一个缩进层级过多的例子，且很容易使用符号<code>&amp;&amp;</code>组合判断条件。在日常编码中，最常遇到的是几个连续的http异步回调，或者几条顺序执行的<code>DataCommand</code>的异步回调，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">DataCommand1.getInstance().start(<span class="keyword">new</span> MyCallback() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DataCommand2.getInstance().start(<span class="keyword">new</span> MyCallback() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                DataCommand3.getInstance().start(<span class="keyword">new</span> MyCallback() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                        </span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                    </span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>上述代码中，如果在某些<code>onSuccess</code>中增加一些<code>if</code>判断之类的条件判断，那这缩进可真是够呛的，更要命的是，debug时设置断点还可能设错行。</p>
+<p>这时，可以尝试使用两个函数把<code>DataCommand2.getInstance().start()</code>与<code>DataCommand3.getInstance().start()</code>分别封装起来，效果会好很多。</p>
+<p>（曾经听到过人讨论「首个大括号是否换行」的代码风格，有人支持换行的理由是，方便计算缩进的个数。其实，当缩进个数需要计算的时候，就表示你的代码需要重构了）</p>
+<h4 id="（6）避免过多的魔数"><a href="#（6）避免过多的魔数" class="headerlink" title="（6）避免过多的魔数"></a>（6）避免过多的魔数</h4><p>魔数，也就是Magic Number、Hard Code。一个常数，如果只使用一次，看起来可以不使用变量保存；如果一个常数在多处Hard Code，当这个常数需要修改时，就需要修改多处，更要命的是，某处还忘了修改。这些个常数，我们称之为魔数。</p>
+<p>不管一个魔数是使用一次，还是多次，最好还是使用一个变量保存。即使只使用一次，通过变量名，我们能够准确地了解这个数字表达的意思。比如一个妹子的生日：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 谁也不知道1012是一个妹子的生日，也不知道为什么num == 1012的含义</span></span><br><span class="line"><span class="keyword">if</span>(num == <span class="number">1012</span>) &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//------分割线------</span></span><br><span class="line"><span class="comment">// 这样做会更好</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIRTHDAY_OF_MEIZI = <span class="number">1012</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span>(num == BIRTHDAY_OF_MEIZI) &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>学习设计模式时，我们常把「对扩展开放，对修改封闭」挂在嘴边，消灭魔数，就是对「开闭原则」的一个最简单的实践。</p>
+<h4 id="（7）尽量缩小变量作用域"><a href="#（7）尽量缩小变量作用域" class="headerlink" title="（7）尽量缩小变量作用域"></a>（7）尽量缩小变量作用域</h4><p>缩小变量作用域，不仅使得相应的代码更易于维护，这也是「高内聚，低耦合」中「高内聚」的一个简单实践。遵循一些原则，如「使用时才初始化」「把相关语句放一起」「函数封装」可以有效地达到「缩小变量作用域」这个目的。这也需要在日常的编码过程中多思考，从细微处保证代码的内聚性。下面简单举例说明一下「把相关语句放一起」，首先看一个反例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ComputShopData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    MarketData mrkData;</span><br><span class="line">    SalesData slsData;</span><br><span class="line">    TravelData trData;</span><br><span class="line"></span><br><span class="line">    mrkData.ComputQuarterly();</span><br><span class="line">    slsData.ComputQuarterly();</span><br><span class="line">    trData.ComputQuarterly();</span><br><span class="line"></span><br><span class="line">    mrkData.ComputAnnual();</span><br><span class="line">    slsData.ComputAnnual();</span><br><span class="line">    trData.ComputAnnual();</span><br><span class="line"></span><br><span class="line">    mrkData.Print();</span><br><span class="line">    slsData.Print();</span><br><span class="line">    trData.Print();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个变量<code>mrkData</code>，<code>slsData</code>，<code>trData</code>的作用域跨度都很大，几乎从函数开始至函数结束，通过以下修改，把相关的语句放一起，会使得代码的思路更加清晰：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ComputShopData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    MarketData mrkData;</span><br><span class="line">    mrkData.ComputQuarterly();</span><br><span class="line">    mrkData.ComputAnnual();</span><br><span class="line">    mrkData.Print();</span><br><span class="line"></span><br><span class="line">    SalesData slsData;</span><br><span class="line">    slsData.ComputQuarterly();</span><br><span class="line">    slsData.ComputAnnual();</span><br><span class="line">    slsData.Print();</span><br><span class="line"></span><br><span class="line">    TravelData trData;</span><br><span class="line">    trData.ComputQuarterly();</span><br><span class="line">    trData.ComputAnnual();</span><br><span class="line">    trData.Print();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>功能不相关的代码，或者功能相差比较大的代码区域，中间可以空一行进行分隔，也可以<strong>封装成函数</strong>，方便以后扩展。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/重构/" rel="tag"># 重构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/29/Java读书笔记/" rel="next" title="Java读书笔记">
+                <i class="fa fa-chevron-left"></i> Java读书笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/13/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-代码规范"><span class="nav-number">1.</span> <span class="nav-text">1. 代码规范</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#（1）Let-Code-Talk"><span class="nav-number">1.1.</span> <span class="nav-text">（1）Let Code Talk</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（2）命名长度问题"><span class="nav-number">1.2.</span> <span class="nav-text">（2）命名长度问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（3）注释"><span class="nav-number">1.3.</span> <span class="nav-text">（3）注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（4）80列"><span class="nav-number">1.4.</span> <span class="nav-text">（4）80列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（5）缩进"><span class="nav-number">1.5.</span> <span class="nav-text">（5）缩进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（6）避免过多的魔数"><span class="nav-number">1.6.</span> <span class="nav-text">（6）避免过多的魔数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（7）尽量缩小变量作用域"><span class="nav-number">1.7.</span> <span class="nav-text">（7）尽量缩小变量作用域</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chan</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="搜集了一下网上的有关MFC单文档多视图的资料，大部分作者的代码实现的是两个视图在不同的时间显示并切换（参考资料http://www.cnblogs.com/cy163/archive/2011/01/09/1931451.html），以及使用CSplitterWnd来实现同时显示两个视图。 我目前的需求是：结合以上两种情况，能分别显示视图1与视图2，也能两个同时显示。以下是程序的设计。 主要思想是">
+<meta name="keywords" content="C&#x2F;C++,MFC,界面设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MFC实现单文档多视图">
+<meta property="og:url" content="http://cyxcw1.github.io/2014/02/22/mfc-singledoc-multiview/index.html">
+<meta property="og:site_name" content="义薄云天">
+<meta property="og:description" content="搜集了一下网上的有关MFC单文档多视图的资料，大部分作者的代码实现的是两个视图在不同的时间显示并切换（参考资料http://www.cnblogs.com/cy163/archive/2011/01/09/1931451.html），以及使用CSplitterWnd来实现同时显示两个视图。 我目前的需求是：结合以上两种情况，能分别显示视图1与视图2，也能两个同时显示。以下是程序的设计。 主要思想是">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320341-300x183.png">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320481-300x183.png">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320591-300x183.png">
+<meta property="og:updated_time" content="2019-01-13T06:24:19.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MFC实现单文档多视图">
+<meta name="twitter:description" content="搜集了一下网上的有关MFC单文档多视图的资料，大部分作者的代码实现的是两个视图在不同的时间显示并切换（参考资料http://www.cnblogs.com/cy163/archive/2011/01/09/1931451.html），以及使用CSplitterWnd来实现同时显示两个视图。 我目前的需求是：结合以上两种情况，能分别显示视图1与视图2，也能两个同时显示。以下是程序的设计。 主要思想是">
+<meta name="twitter:image" content="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320341-300x183.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://cyxcw1.github.io/2014/02/22/mfc-singledoc-multiview/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>MFC实现单文档多视图 | 义薄云天</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">义薄云天</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cyxcw1.github.io/2014/02/22/mfc-singledoc-multiview/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="义薄云天">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MFC实现单文档多视图
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-02-22 23:23:36" itemprop="dateCreated datePublished" datetime="2014-02-22T23:23:36+08:00">2014-02-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-13 14:24:19" itemprop="dateModified" datetime="2019-01-13T14:24:19+08:00">2019-01-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/MFC/" itemprop="url" rel="index"><span itemprop="name">MFC</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>搜集了一下网上的有关MFC单文档多视图的资料，大部分作者的代码实现的是两个视图在不同的时间显示并切换（参考资料<a href="http://www.cnblogs.com/cy163/archive/2011/01/09/1931451.html），以及使用CSplitterWnd来实现同时显示两个视图。" target="_blank" rel="noopener">http://www.cnblogs.com/cy163/archive/2011/01/09/1931451.html），以及使用CSplitterWnd来实现同时显示两个视图。</a></p>
+<p>我目前的需求是：结合以上两种情况，能分别显示视图1与视图2，也能两个同时显示。以下是程序的设计。</p>
+<p><strong>主要思想</strong>是：分别建立一个CSplitterWnd的对象以及视图1以及视图2的两个对象，用户要求单独显示的时候就根据需求显示视图1或者视图2的对象，要同时显示两个视图的话就显示CSplitterWnd的对象。这个思想也可以扩展到多视图的显示。</p>
+<p><strong>步骤1</strong>：在MainFrm里增加这三个成员。</p>
+<p><pre class="lang:c++ decode:true">    CSplitterWnd    m_SplitWnd;<br>    CsplittestView    <em>m_SView;<br>    CSecView        </em>m_SecView;</pre><br>其中CsplittestView是系统自动生成的View，CSecView是自己写的继承于CsplittestView的View，当然也可以用其他的如Edit之类的。</p>
+<p><strong>步骤2</strong>：重载MainFrm里的OnCreateClient函数。</p>
+<p><pre class="lang:c++ decode:true">BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)<br>{<br>    // TODO: Add your specialized code here and/or call the base class</pre></p>
+<pre><code>/* 建立Splitter对象并隐藏，这个可以根据用户的需求而定，如果窗体第一次
+ * 出现时要显示的是双视图，可以ShowWindow(SW_SHOW)
+ */
+m_SplitWnd.CreateStatic(this,1,2);
+m_SplitWnd.CreateView(0,0,RUNTIME_CLASS(CsplittestView),CSize(400,30),pContext);
+m_SplitWnd.CreateView(0,1,RUNTIME_CLASS(CSecView),CSize(30,30),pContext);
+m_SplitWnd.ShowWindow(SW_HIDE);
+
+/* 建立视图1，并显示。注意需要显示的视图的ID号必须是AFX_IDW_PANE_FIRST */
+CRect rect;
+m_SView = new CsplittestView();
+m_SView-&amp;gt;Create(NULL, NULL, WS_CHILD, rect, this, AFX_IDW_PANE_FIRST, pContext);
+m_SView-&amp;gt;ShowWindow(SW_SHOW);
+
+/* 建立视图2并隐藏 */
+CRect rect2;
+m_SecView = new CSecView();
+m_SecView-&amp;gt;Create(NULL, NULL, WS_CHILD, rect2, this, AFX_IDW_PANE_FIRST + 2, pContext);
+m_SecView-&amp;gt;ShowWindow(SW_HIDE);
+
+//return CFrameWnd::OnCreateClient(lpcs, pContext);
+return TRUE;
+</code></pre><p>}<br><strong>步骤3</strong>：建立众视图之后，就可以增加切换视图的响应函数。</p>
+<p><pre class="lang:c++ decode:true">/<em> 切换到视图1的响应函数 </em>/<br>void CMainFrame::OnEditSwitchtoone()<br>{<br>    // TODO: Add your command handler code here<br>    /<em> 注意调整ID号 </em>/<br>    m_SecView-&gt;SetDlgCtrlID(AFX_IDW_PANE_FIRST + 1);<br>    m_SView-&gt;SetDlgCtrlID(AFX_IDW_PANE_FIRST);</pre></p>
+<pre><code>/* 显示 */
+m_SView-&amp;gt;ShowWindow(TRUE);
+m_SecView-&amp;gt;ShowWindow(FALSE);
+m_SplitWnd.ShowWindow(FALSE);
+
+/* 刷新 */
+this-&amp;gt;RecalcLayout();
+</code></pre><p>}<br>&nbsp;</p>
+<p><pre class="lang:c++ decode:true">/<em> 切换到视图2的响应，同视图1 </em>/<br>void CMainFrame::OnEditSwitchtotwo()<br>{<br>    // TODO: Add your command handler code here</pre></p>
+<pre><code>m_SView-&amp;gt;SetDlgCtrlID(AFX_IDW_PANE_FIRST + 1);
+m_SecView-&amp;gt;SetDlgCtrlID(AFX_IDW_PANE_FIRST);
+
+m_SecView-&amp;gt;ShowWindow(TRUE);
+m_SView-&amp;gt;ShowWindow(FALSE);
+m_SplitWnd.ShowWindow(FALSE);
+
+this-&amp;gt;RecalcLayout();
+</code></pre><p>}<br>&nbsp;</p>
+<p><pre class="lang:c++ decode:true">/<em> 同时显示两个视图的函数 </em>/<br>void CMainFrame::OnEditShowall()<br>{<br>    // TODO: Add your command handler code here</pre></p>
+<pre><code>/* 要切换回视图1才能显示，目前还不知道问题出在什么地方 */
+OnEditSwitchtoone();
+m_SView-&amp;gt;SetDlgCtrlID(AFX_IDW_PANE_FIRST + 1);
+m_SecView-&amp;gt;SetDlgCtrlID(AFX_IDW_PANE_FIRST + 2);
+
+m_SView-&amp;gt;ShowWindow(FALSE);
+m_SView-&amp;gt;ShowWindow(FALSE);
+m_SplitWnd.ShowWindow(TRUE);
+
+this-&amp;gt;RecalcLayout();
+</code></pre><p>}<br><strong>实验</strong>：在两个View中填写OnDraw函数。</p>
+<p><pre class="lang:c++ decode:true">void CsplittestView::OnDraw(CDC<em> pDC)<br>{<br>    CsplittestDoc</em> pDoc = GetDocument();<br>    ASSERT_VALID(pDoc);<br>    if (!pDoc)<br>        return;</pre></p>
+<pre><code>// TODO: add draw code for native data here
+pDC-&amp;gt;TextOut(400,300,&quot;First View&quot;);
+pDC-&amp;gt;TextOut(400,320,pDoc-&amp;gt;GetTitle());
+</code></pre><p>}<br>&nbsp;</p>
+<p><pre class="lang:c++ decode:true">void CSecView::OnDraw(CDC<em> pDC)<br>{<br>    CDocument</em> pDoc = GetDocument();<br>    // TODO: add draw code here</pre></p>
+<pre><code>pDC-&amp;gt;TextOut(400,300,&quot;Second View&quot;);
+pDC-&amp;gt;TextOut(400,320,pDoc-&amp;gt;GetTitle());
+</code></pre><p>}<br>点击各种视图切换后的效果如下。</p>
+<p>视图1：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320341.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320341-300x183.png" alt="QQ截图20140222232034"></a></p>
+<p>&nbsp;</p>
+<p>视图2：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320481.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320481-300x183.png" alt="QQ截图20140222232048"></a></p>
+<p>双视图：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320591.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/02/QQ截图201402222320591-300x183.png" alt="QQ截图20140222232059"></a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C-C/" rel="tag"># C/C++</a>
+          
+            <a href="/tags/MFC/" rel="tag"># MFC</a>
+          
+            <a href="/tags/界面设计/" rel="tag"># 界面设计</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/02/17/sublime-fix-ubuntu-taskbar/" rel="next" title="sublime text固定在ubuntu任务栏">
+                <i class="fa fa-chevron-left"></i> sublime text固定在ubuntu任务栏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/06/solve-xelatex-use-myriadpro-slanted-form/" rel="prev" title="解决XeLaTex不能使用Minion Pro的斜体">
+                解决XeLaTex不能使用Minion Pro的斜体 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chan</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

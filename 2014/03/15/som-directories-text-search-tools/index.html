@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1. Visual StudioVisual Studio中有非常方便的文本搜索功能，能够轻松定位到一个工程中一个函数或者单单是一个字符串的位置。当然，如果你并没有建立一个工程，而单单想阅读他人的代码，Visual Studio也提供非常方便的文本搜索功能。 Edit-&amp;gt;Find and Replace-&amp;gt;Find in Files（或者快捷键Ctrl+Shift+F）即可打开这个功能">
+<meta name="keywords" content="ack,EditPlus,grep,sublime,Visual Studio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="几款文件夹内文本搜索工具">
+<meta property="og:url" content="http://cyxcw1.github.io/2014/03/15/som-directories-text-search-tools/index.html">
+<meta property="og:site_name" content="义薄云天">
+<meta property="og:description" content="1. Visual StudioVisual Studio中有非常方便的文本搜索功能，能够轻松定位到一个工程中一个函数或者单单是一个字符串的位置。当然，如果你并没有建立一个工程，而单单想阅读他人的代码，Visual Studio也提供非常方便的文本搜索功能。 Edit-&amp;gt;Find and Replace-&amp;gt;Find in Files（或者快捷键Ctrl+Shift+F）即可打开这个功能">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/03/vs1.png">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/03/ep1.png">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/03/subl1.png">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/03/st1.png">
+<meta property="og:image" content="http://yunuschan.com/wp-content/uploads/2014/03/grep使用1.png">
+<meta property="og:updated_time" content="2019-01-13T06:24:19.238Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="几款文件夹内文本搜索工具">
+<meta name="twitter:description" content="1. Visual StudioVisual Studio中有非常方便的文本搜索功能，能够轻松定位到一个工程中一个函数或者单单是一个字符串的位置。当然，如果你并没有建立一个工程，而单单想阅读他人的代码，Visual Studio也提供非常方便的文本搜索功能。 Edit-&amp;gt;Find and Replace-&amp;gt;Find in Files（或者快捷键Ctrl+Shift+F）即可打开这个功能">
+<meta name="twitter:image" content="http://yunuschan.com/wp-content/uploads/2014/03/vs1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://cyxcw1.github.io/2014/03/15/som-directories-text-search-tools/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>几款文件夹内文本搜索工具 | 义薄云天</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">义薄云天</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cyxcw1.github.io/2014/03/15/som-directories-text-search-tools/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="义薄云天">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">几款文件夹内文本搜索工具
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-03-15 11:19:49" itemprop="dateCreated datePublished" datetime="2014-03-15T11:19:49+08:00">2014-03-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-13 14:24:19" itemprop="dateModified" datetime="2019-01-13T14:24:19+08:00">2019-01-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-Visual-Studio"><a href="#1-Visual-Studio" class="headerlink" title="1. Visual Studio"></a>1. Visual Studio</h2><p>Visual Studio中有非常方便的文本搜索功能，能够轻松定位到一个工程中一个函数或者单单是一个字符串的位置。当然，如果你并没有建立一个工程，而单单想阅读他人的代码，Visual Studio也提供非常方便的文本搜索功能。</p>
+<p>Edit-&gt;Find and Replace-&gt;Find in Files（或者快捷键Ctrl+Shift+F）即可打开这个功能，可以根据自己的需求指定搜索的字符串、文件夹以及文件类型（能使用正则表达式）进行搜索：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/03/vs1.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/03/vs1.png" alt="vs"></a></p>
+<p>&nbsp;</p>
+<h2 id="2-EditPlus"><a href="#2-EditPlus" class="headerlink" title="2. EditPlus"></a>2. EditPlus</h2><p>EditPlus也提供文本搜索的功能，点击“搜索”-&gt;“在文件中查找”，搜索的方法和效果基本和上面介绍的Visual Studio相同，记得把“包含子文件夹”的勾打上：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/03/ep1.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/03/ep1.png" alt="ep"></a></p>
+<p>&nbsp;</p>
+<h2 id="3-Sublime-Text"><a href="#3-Sublime-Text" class="headerlink" title="3. Sublime Text"></a>3. Sublime Text</h2><p>Sublime Text中也提供非常方便的文本搜索功能，而且还能很直观地进行预览，点击Find-&gt;Find in Files就可以打开次功能：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/03/subl1.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/03/subl1.png" alt="subl"></a></p>
+<p>其中…按钮也能提供非常灵活的选项。搜索出来的文本效果如图：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/03/st1.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/03/st1.png" alt="st"></a></p>
+<p>双击相应的高亮文本或者该文本所在的行，能够跳到相应的文件。</p>
+<h2 id="4-Linux中的grep工具"><a href="#4-Linux中的grep工具" class="headerlink" title="4. Linux中的grep工具"></a>4. Linux中的grep工具</h2><p>虽然Linux中也有Sublime Text，但是感觉grep工具更加强大。使用grep的基本方式：</p>
+<p><pre class="lang:sh decode:true">grep -r text files</pre><br>&nbsp;</p>
+<p>-r表示递归搜索，grep不仅能搜索相应的文本，而且如果文件的名称包含该“text”字符串，也能显示出来，而且能非常方便得使用Linux中的管道功能：</p>
+<p><a href="http://yunuschan.com/wp-content/uploads/2014/03/grep使用1.png" target="_blank" rel="noopener"><img src="http://yunuschan.com/wp-content/uploads/2014/03/grep使用1.png" alt="grep使用"></a></p>
+<p>&nbsp;</p>
+<h2 id="5-Linux中的ack工具"><a href="#5-Linux中的ack工具" class="headerlink" title="5. Linux中的ack工具"></a>5. Linux中的ack工具</h2><p>这个工具用得不是很熟，基本的用法和grep差不多。详见极客范中的<a href="http://www.geekfan.net/6881/" target="_blank" rel="noopener">这篇文章</a>，其中还包括了很多高级用法。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ack/" rel="tag"># ack</a>
+          
+            <a href="/tags/EditPlus/" rel="tag"># EditPlus</a>
+          
+            <a href="/tags/grep/" rel="tag"># grep</a>
+          
+            <a href="/tags/sublime/" rel="tag"># sublime</a>
+          
+            <a href="/tags/Visual-Studio/" rel="tag"># Visual Studio</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/03/15/round-tag-cloud-color-tag/" rel="next" title="Round Tag Cloud标签云插件实现彩色标签">
+                <i class="fa fa-chevron-left"></i> Round Tag Cloud标签云插件实现彩色标签
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/22/visual-studio-vassistx-auto-add-comment/" rel="prev" title="Visual Studio+VAssistX自动添加注释">
+                Visual Studio+VAssistX自动添加注释 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Visual-Studio"><span class="nav-number">1.</span> <span class="nav-text">1. Visual Studio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-EditPlus"><span class="nav-number">2.</span> <span class="nav-text">2. EditPlus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Sublime-Text"><span class="nav-number">3.</span> <span class="nav-text">3. Sublime Text</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Linux中的grep工具"><span class="nav-number">4.</span> <span class="nav-text">4. Linux中的grep工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Linux中的ack工具"><span class="nav-number">5.</span> <span class="nav-text">5. Linux中的ack工具</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chan</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
